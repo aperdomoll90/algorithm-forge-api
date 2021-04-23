@@ -28,7 +28,7 @@ exports.getAllUsers = (req, res) => {
 
 exports.newUser = (req, res) => {
   connectToFB();
-  const newData = req.data;
+  const newData = req.body;
   db.collection('users')
     .add(newData)
     .then(() => this.getAllUsers(req, res))
