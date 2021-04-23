@@ -1,13 +1,13 @@
-const { response } = require('express');
+
 var admin = require('firebase-admin');
-var serviceAccount = require('../../credentials.json');
+var credentials = require('../../credentials.json');
 
 let db;
 
 function connectToFB() {
   if (!db) {
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+      credential: admin.credential.cert(credentials),
     });
     db = admin.firestore();
   }
@@ -17,13 +17,16 @@ exports.getAllUsers = (req, res) => {
   connectToFB();
   db.collection('users')
     .get()
-    .then((userList) => {
+    .then(collection => {
       let allUsers = [];
-      userList.forEach((user) => {
-        allUsers.push(user.data());
+      collection.forEach(doc => {
+        let user = doc.data()
+        user.id = doc.id
+        allUsers.push(user);
       });
-    });
-  res.send(allUsers);
+      res.send(allUsers);
+    })
+    .catch((err) => res.send('Error fetching user', +err.message));
 };
 
 exports.newUser = (req, res) => {
