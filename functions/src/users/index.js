@@ -29,6 +29,8 @@ exports.getAllUsers = (req, res) => {
     .catch((err) => res.send('Error fetching user', +err.message));
 };
 
+exports.getUserById
+
 exports.newUser = (req, res) => {
   connectToFB();
   const newData = req.body;
